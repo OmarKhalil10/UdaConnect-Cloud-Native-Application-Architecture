@@ -1,0 +1,117 @@
+{
+	"info": {
+	  "_postman_id": "new-postman-id-002",
+	  "name": "UdaConnect API Collection",
+	  "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+	  {
+		"name": "Retrieve All Persons",
+		"request": {
+		  "method": "GET",
+		  "header": [],
+		  "url": {
+			"raw": "http://localhost:30001/api/persons",
+			"protocol": "http",
+			"host": [
+			  "localhost"
+			],
+			"port": "30001",
+			"path": [
+			  "api",
+			  "persons"
+			]
+		  }
+		},
+		"response": []
+	  },
+	  {
+		"name": "Retrieve Person with ID 10",
+		"request": {
+		  "method": "GET",
+		  "header": [],
+		  "url": {
+			"raw": "http://localhost:30001/api/persons/10",
+			"protocol": "http",
+			"host": [
+			  "localhost"
+			],
+			"port": "30001",
+			"path": [
+			  "api",
+			  "persons",
+			  "10"
+			]
+		  }
+		},
+		"response": []
+	  },
+	  {
+		"name": "Retrieve Connections for Person 8",
+		"request": {
+		  "method": "GET",
+		  "header": [],
+		  "url": {
+			"raw": "http://localhost:30004/api/persons/8/connection?start_date={{start_date}}&end_date={{end_date}}&distance=10",
+			"protocol": "http",
+			"host": [
+			  "localhost"
+			],
+			"port": "30004",
+			"path": [
+			  "api",
+			  "persons",
+			  "8",
+			  "connection"
+			],
+			"query": [
+			  {
+				"key": "start_date",
+				"value": "{{start_date}}"
+			  },
+			  {
+				"key": "end_date",
+				"value": "{{end_date}}"
+			  },
+			  {
+				"key": "distance",
+				"value": "10"
+			  }
+			]
+		  }
+		},
+		"response": []
+	  },
+	  {
+		"name": "Create Person Record",
+		"request": {
+		  "method": "POST",
+		  "header": [
+			{
+			  "key": "Content-Type",
+			  "value": "application/json",
+			  "type": "text"
+			}
+		  ],
+		  "body": {
+			"mode": "raw",
+			"raw": "{\n    \"first_name\": \"Omar\",\n    \"last_name\": \"Khalil\",\n    \"company_name\": \"Udacity\"\n}"
+		  },
+		  "url": {
+			"raw": "http://localhost:30001/api/persons",
+			"protocol": "http",
+			"host": [
+			  "localhost"
+			],
+			"port": "30001",
+			"path": [
+			  "api",
+			  "persons"
+			]
+		  }
+		},
+		"response": []
+	  }
+	]
+  }
+  

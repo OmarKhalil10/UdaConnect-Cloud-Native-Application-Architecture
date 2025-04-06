@@ -1,0 +1,22 @@
+Overview
+This document provides an overview of the gRPC service used in the UdaConnect project, including its functionality, endpoints, and how to make a request.
+
+Service Definition
+The gRPC service is responsible for handling location data and identifying connections between individuals based on proximity. It facilitates high-performance communication between microservices.
+
+Protobuf Definition
+The service is defined using Protocol Buffers (.proto file), which specifies the request and response formats. The generated Python files (location_pb2.py and location_pb2_grpc.py) enable gRPC communication.
+
+Components
+- grpc_server.py: Implements the gRPC server, handling incoming location data and processing connection requests.
+- generator.py: Generates mock location data and sends it to the gRPC service.
+- location.proto: Defines the gRPC service, including message structures and method specifications.
+- Dockerfile: Builds a containerized gRPC server for deployment in a Kubernetes environment.
+- requirements.txt: Lists dependencies required to run the gRPC server.
+
+How to Make a gRPC Request
+- Ensure the gRPC server is running.
+- Use a gRPC client to send location data.
+- The server processes the data and returns connection results.
+
+This service enables efficient real-time communication between microservices, supporting scalable event-driven architecture.

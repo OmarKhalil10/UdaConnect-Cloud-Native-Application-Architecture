@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+data:
+  TOPIC_NAME: "locations"
+  KAFKA_SERVER: "kafka-server:9092"
+metadata:
+  name: kafka-env

@@ -1,0 +1,212 @@
+openapi: 3.1.0
+info:
+  title: UdaConnect API
+  version: "1.0.0"
+  description: >
+    This API provides endpoints to manage persons, locations, and connection data 
+    for the UdaConnect application.
+servers:
+  - url: http://localhost:30001/api
+    description: Person & Connection API Server
+  - url: http://localhost:30004/api
+    description: Connection API Server (for connection search)
+paths:
+  /persons:
+    get:
+      summary: Retrieve All Persons
+      operationId: getAllPersons
+      tags:
+        - Persons
+      responses:
+        '200':
+          description: A list of person objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Person'
+    post:
+      summary: Create a New Person
+      operationId: createPerson
+      tags:
+        - Persons
+      requestBody:
+        description: Person object that needs to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Person'
+      responses:
+        '201':
+          description: Person created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+  /persons/{personId}:
+    get:
+      summary: Retrieve a Person by ID
+      operationId: getPersonById
+      tags:
+        - Persons
+      parameters:
+        - name: personId
+          in: path
+          description: Unique ID of the person to retrieve
+          required: true
+          schema:
+            type: integer
+            example: 10
+      responses:
+        '200':
+          description: A person object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+        '404':
+          description: Person not found
+  /persons/{personId}/connection:
+    get:
+      summary: Retrieve Connections for a Person
+      operationId: getConnections
+      tags:
+        - Connections
+      parameters:
+        - name: personId
+          in: path
+          description: Unique ID of the person for connection search
+          required: true
+          schema:
+            type: integer
+            example: 8
+        - name: start_date
+          in: query
+          description: Lower bound of date range (YYYY-MM-DD)
+          required: true
+          schema:
+            type: string
+            format: date
+            example: "2025-01-01"
+        - name: end_date
+          in: query
+          description: Upper bound of date range (YYYY-MM-DD)
+          required: true
+          schema:
+            type: string
+            format: date
+            example: "2025-12-31"
+        - name: distance
+          in: query
+          description: Proximity distance in meters
+          required: false
+          schema:
+            type: integer
+            default: 5
+            example: 10
+      responses:
+        '200':
+          description: A list of connection records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Connection'
+  /locations:
+    post:
+      summary: Create a New Location Record
+      operationId: createLocation
+      tags:
+        - Locations
+      requestBody:
+        description: Location object to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Location'
+      responses:
+        '201':
+          description: Location record created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+  /locations/{locationId}:
+    get:
+      summary: Retrieve a Location Record by ID
+      operationId: getLocationById
+      tags:
+        - Locations
+      parameters:
+        - name: locationId
+          in: path
+          description: Unique ID of the location record
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: A location record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+        '404':
+          description: Location not found
+
+components:
+  schemas:
+    Person:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        first_name:
+          type: string
+          example: "Omar"
+        last_name:
+          type: string
+          example: "Khalil"
+        company_name:
+          type: string
+          example: "Udacity"
+      required:
+        - first_name
+        - last_name
+        - company_name
+    Location:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        person_id:
+          type: integer
+          example: 1
+        longitude:
+          type: string
+          example: "-73.935242"
+        latitude:
+          type: string
+          example: "40.73061"
+        creation_time:
+          type: string
+          format: date-time
+          example: "2025-02-20T12:34:56Z"
+      required:
+        - person_id
+        - longitude
+        - latitude
+    Connection:
+      type: object
+      properties:
+        person:
+          $ref: '#/components/schemas/Person'
+        location:
+          $ref: '#/components/schemas/Location'

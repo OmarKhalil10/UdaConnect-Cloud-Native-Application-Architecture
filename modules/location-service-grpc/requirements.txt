@@ -1,0 +1,9 @@
+GeoAlchemy2
+greenlet
+grpcio
+grpcio-tools
+kafka-python
+packaging
+protobuf
+psycopg2-binary
+SQLAlchemy

@@ -1,0 +1,143 @@
+1. Overview
+
+UdaConnect has been refactored from a monolithic architecture into a microservices-based architecture to improve scalability, maintainability, and performance. This document outlines the key architectural decisions made during the design and development of this system.
+
+2. Why Microservices?
+
+✅ Scalability
+
+Each service can be scaled independently based on traffic.
+
+Kafka-based event-driven architecture ensures efficient processing.
+
+✅ Maintainability
+
+Services are loosely coupled and follow single responsibility principles.
+
+Easy to modify and extend without affecting other services.
+
+✅ Performance Optimization
+
+gRPC for inter-service communication to reduce latency.
+
+Asynchronous message passing via Kafka prevents bottlenecks.
+
+✅ Technology Diversity
+
+Each microservice can be implemented in different technologies if needed.
+
+Database and caching layers are independent per service.
+
+3. System Components & Their Design Justifications
+
+1️⃣ Person Service (REST API)
+
+Function: Manages user information.
+
+Justification: CRUD operations on users don’t require real-time processing, so REST API is a better choice.
+
+Database: PostgreSQL.
+
+2️⃣ Location Service (gRPC + Kafka Producer)
+
+Function: Processes incoming user location data.
+
+Justification: gRPC provides efficient binary serialization, reducing overhead for frequent location updates.
+
+Kafka Producer: Publishes messages for event-driven processing.
+
+Database: PostgreSQL with PostGIS for geospatial queries.
+
+3️⃣ Connection Service (REST API + Kafka Consumer)
+
+Function: Identifies users in close proximity.
+
+Justification: Consumes messages asynchronously from Kafka, allowing high throughput processing.
+
+Database: PostgreSQL with PostGIS for distance calculations.
+
+4️⃣ Frontend (ReactJS)
+
+Function: Displays user data and connection insights.
+
+Justification: Separation of frontend allows for independent UI development and enhancements.
+
+4. Communication Patterns
+
+REST API (for external access):
+
+Exposes Person and Connection services.
+
+Provides documentation via OpenAPI.
+
+gRPC (for internal communication):
+
+Used between Location and Connection services for high-performance RPC calls.
+
+Kafka (for event-driven messaging):
+
+Ensures non-blocking communication.
+
+Allows Location Service to send events to Connection Service without waiting.
+
+5. Database Design
+
+PostgreSQL: Used for all microservices for consistency.
+
+PostGIS Extension: Enables geospatial queries for location tracking.
+
+Data Separation: Each microservice has its own dedicated database.
+
+6. Deployment Strategy
+
+Containerized with Docker:
+
+Each microservice runs in its own Docker container.
+
+Orchestrated with Kubernetes:
+
+Enables auto-scaling and fault tolerance.
+
+Uses NodePort for external access.
+
+CI/CD Integration:
+
+Automated build and push of containers to Docker Hub.
+
+7. Key Trade-offs & Considerations
+
+- gRPC for Internal Communication
+
+Trade-off: Requires additional client libraries.
+
+Justification: Provides high-performance, low-latency communication.
+
+- Kafka for Event-Driven Messaging
+
+Trade-off: Adds operational complexity.
+
+Justification: Allows scalable and decoupled services.
+
+- PostgreSQL over NoSQL
+
+Trade-off: Less flexible for unstructured data.
+
+Justification: Supports relational queries and strong consistency.
+
+- Kubernetes for Deployment
+
+Trade-off: Higher setup complexity.
+
+Justification: Enables automated scaling and management.
+
+8. Future Improvements
+
+Introduce Caching (Redis): To reduce database load.
+
+Implement API Gateway: To streamline requests and authentication.
+
+Logging & Monitoring (Prometheus, Grafana): To enhance observability.
+
+9. Conclusion
+
+The architectural decisions made ensure that UdaConnect is scalable, efficient, and maintainable. The use of microservices, event-driven messaging, and containerized deployments aligns with modern best practices for distributed systems.
